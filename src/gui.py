@@ -2,9 +2,12 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 from tkinter.messagebox import showinfo
+from typing import Optional
 
 class GUI(ttk.Frame):
-    def __init__(self, master=None):
+    def __init__(self, master: Optional[tk.Tk] = None):
+        if master is None:
+            raise ValueError("master cannot be None")
         super().__init__(master)
         self.master = master
         self.grid(sticky='nsew')
@@ -56,7 +59,7 @@ class GUI(ttk.Frame):
         self.select_input_button = ttk.Button(
             self.settings_frame,
             text="Browse",
-            command=self.default_input_directory
+            command=self.select_input_directory
         )
         self.select_input_button.grid(row=1, column=0, padx=10, pady=10, sticky='w')
 
@@ -72,7 +75,7 @@ class GUI(ttk.Frame):
         self.select_output_button = ttk.Button(
             self.settings_frame,
             text="Browse",
-            command=self.default_output_directory
+            command=self.select_output_directory
         )
         self.select_output_button.grid(row=3, column=0, padx=10, pady=10, sticky='w')
 
@@ -130,13 +133,13 @@ class GUI(ttk.Frame):
         self.table.grid(row=1, column=0, sticky='nsew')
         
         # Add a vertical scrollbar
-        self.scrollbar_y = ttk.Scrollbar(self.music_library_frame, orient='vertical', command=self.table.yview)
-        self.table.configure(yscroll=self.scrollbar_y.set)
+        self.scrollbar_y = ttk.Scrollbar(self.music_library_frame, orient='vertical')
+        self.scrollbar_y.configure(command=self.table.yview)
         self.scrollbar_y.grid(row=1, column=1, sticky='ns')
 
         # Add a horizontal scrollbar
-        self.scrollbar_x = ttk.Scrollbar(self.music_library_frame, orient='horizontal', command=self.table.xview)
-        self.table.configure(xscroll=self.scrollbar_x.set)
+        self.scrollbar_x = ttk.Scrollbar(self.music_library_frame, orient='horizontal')
+        self.scrollbar_x.configure(command=self.table.xview)
         self.scrollbar_x.grid(row=2, column=0, sticky='ew')
 
         # Add save button
